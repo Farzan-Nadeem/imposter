@@ -4,7 +4,7 @@ var TimerId = 0;
 var SessionKey = "", UserKey = "";
 var Users = [];
 
-var GameEntered = false; 
+var GameEntered = false;
 
 var UserRef, GameStatusRef, UserWithRoleRef;
 
@@ -72,19 +72,26 @@ $(document).ready(function () {
 });
 
 function createGame() {
-    if(GameEntered) { 
-        return; 
-    }
-
-    GameEntered = true; 
-
     $('#submitCreateForm').on('submit', function (e) {
         e.preventDefault();
+        if (GameEntered) {
+            return;
+        }
 
+        var displayName = $("#displayName").val(); 
+        var gameTimer = $("#gameTimer").val();
+
+        if(!displayName || !gameTimer) { 
+            alert("Please enter all necessary credentials");
+            return;
+        }
+        
         let data = {
-            "displayName": $("#displayName").val(),
-            "gameTimer": $("#gameTimer").val()
+            "displayName": displayName,
+            "gameTimer": gameTimer
         };
+
+        GameEntered = true;
 
         $.ajax({
             type: "POST",
@@ -102,20 +109,27 @@ function createGame() {
 }
 
 function joinGame() {
-    if(GameEntered) { 
-        return; 
-    }
-    
-    GameEntered = true; 
-
     $('#joinForm').on('submit', function (e) {
         e.preventDefault();
+        if (GameEntered) {
+            return;
+        }
 
+        var gameId = $("#gameId").val(); 
+        var joineeName = $("#joineeName").val();
+
+        if(!gameId || !joineeName) { 
+            alert("Please enter all necessary credentials");
+            return;
+        }
+        
         let data = {
-            "gameId": $("#gameId").val(),
-            "joineeName": $("#joineeName").val(),
+            "gameId": gameId,
+            "joineeName": joineeName
         };
-
+ 
+        GameEntered = true;
+ 
         $.ajax({
             type: "POST",
             url: "https://us-central1-imposter-49c44.cloudfunctions.net/joinGame",
@@ -199,11 +213,11 @@ function PrepGamePage(roleInformation) {
         return;
     }
 
-    if (roleInformation.role !== null && roleInformation.role !== "") { 
+    if (roleInformation.role !== null && roleInformation.role !== "") {
         NextWindow("#gamePage");
 
         // Then starts the game timer in 2 seconds
-        setTimeout(startTimer(roleInformation.gameTimer*60, document.querySelector('#timer')), 2000); 
+        setTimeout(startTimer(roleInformation.gameTimer * 60, document.querySelector('#timer')), 2000);
     }
 
     var $imposter = $('#imposter');
@@ -287,7 +301,7 @@ function startTimer(duration, display) {
     }, 1000);
 }
 
-function stopTimer() { 
+function stopTimer() {
     clearInterval(TimerId);
 }
 
@@ -301,5 +315,5 @@ function StrikeThrough(e) {
 }
 
 function NextWindow(target) {
-     $(target + 'Tab').click();
+    $(target + 'Tab').click();
 }

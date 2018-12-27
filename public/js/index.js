@@ -4,6 +4,8 @@ var TimerId = 0;
 var SessionKey = "", UserKey = "";
 var Users = [];
 
+var GameEntered = false; 
+
 var UserRef, GameStatusRef, UserWithRoleRef;
 
 const httpOptions = {
@@ -70,6 +72,12 @@ $(document).ready(function () {
 });
 
 function createGame() {
+    if(GameEntered) { 
+        return; 
+    }
+
+    GameEntered = true; 
+
     $('#submitCreateForm').on('submit', function (e) {
         e.preventDefault();
 
@@ -94,6 +102,12 @@ function createGame() {
 }
 
 function joinGame() {
+    if(GameEntered) { 
+        return; 
+    }
+    
+    GameEntered = true; 
+
     $('#joinForm').on('submit', function (e) {
         e.preventDefault();
 

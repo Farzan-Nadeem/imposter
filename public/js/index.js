@@ -102,7 +102,7 @@ function createGame() {
                 GoToGameLobby(data.sessionKey, data.userKey, true);
             },
             error: function () {
-                alert("There was an error creating your game! Please begin crying");
+                alert("There was an error creating your game! Please try again!");
             }
         });
     });
@@ -139,7 +139,7 @@ function joinGame() {
                 GoToGameLobby(data.sessionKey, data.userKey);
             },
             error: function () {
-                alert("There was an error while joining the game! Please begin crying");
+                alert("There was an error while joining the game! Please ensure that game id is correct!");
             }
         });
     });
@@ -203,7 +203,7 @@ function StartGame() {
             // PrepGamePage will be triggered due to the role change and will move to the GamePage 
         },
         error: function () {
-            alert("There was an error while starting the game! Please begin crying");
+            alert("There was an error while starting the game! Please try again!");
         }
     });
 }

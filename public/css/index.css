@@ -1,0 +1,52 @@
+.buffer {
+    margin-top: 5vh;
+}
+
+.buffer-footer { 
+    margin-bottom: 5vh;
+}
+.btn-space { 
+    margin-right: 5px;
+}
+
+.buffer-bottom { 
+    padding-bottom: 5px;
+}
+
+a { 
+    color: white;
+}
+
+li { 
+    padding-bottom: 5px;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+main {
+    flex: 1 0 auto;
+}
+ 
+.indicators { 
+    display: none
+} 
+
+.subtitle { 
+    font-weight: 400;
+    font-size: larger
+}
+
+.strikethrough { 
+    text-decoration: line-through;
+}
+
+.tabs { 
+    display: none;
+}
+
+.timer { 
+    font-size: large;
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Imposter!</title>
+
+  <!-- Firebase scripts -->
+  <script defer src="/__/firebase/5.7.0/firebase-app.js"></script>
+  <script defer src="/__/firebase/5.7.0/firebase-auth.js"></script>
+  <script defer src="/__/firebase/5.7.0/firebase-database.js"></script>
+  <script defer src="/__/firebase/5.7.0/firebase-messaging.js"></script>
+  <script defer src="/__/firebase/5.7.0/firebase-storage.js"></script>
+  <!-- initialize the SDK after all desired features are loaded -->
+  <script defer src="/__/firebase/init.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script type="text/javascript" src='js/materialize.js'></script>
+  <script type="text/javascript" src="js/index.js"></script>
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/materialize.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+  <header>
+    <!-- Empty header to enforce structure -->
+  </header>
+
+  <main id="main">
+
+    <ul id="tabs" class="tabs">
+      <li class="tab"><a id="gameStartTab" href="#gameStart" class="active" >Game Start</a></li>
+      <li class="tab"><a id="gameLobbyTab" href="#gameLobby">Game Lobby</a></li>
+      <li class="tab"><a id="gamePageTab"  href="#gamePage">Game Page</a></li>
+    </ul>
+
+
+    <div id="gameStart" class="col s12 buffer-bottom">
+      <!-- Opening page -->
+      <div>
+        <div class="container">
+          <div class="buffer"><br></div>
+          <div class="title center-align">
+            <h3>Imposter!</h3>
+          </div>
+
+          <hr>
+
+          <div class="text-primary black-text">
+            <div class="container">
+              <div class="left-align">
+                <b><u>Rules:</u></b>
+                <ul>
+                  <li>- Once the party starts, a location will be selected and everyone will be assigned
+                    a
+                    role corresponding to that location </li>
+                  <li>- However, the <i>Imposter</i> will not know the location </li>
+                  <li>- Everyone takes turns asking a specific person a question to determine if they
+                    know
+                    the location</li>
+                  <li>- Once the game timer finishes, the players take guesses as to who is the <i>Imposter</i>
+                  </li>
+                  <li>- The <i>Imposter</i> will reveal themselves once everyone has given their guesses</li>
+                </ul>
+              </div>
+            </div>
+
+            <hr> <br>
+            <div class="game-options center-align">
+              <a class="waves-effect waves-light btn btn-space teal lighten-2 modal-trigger" href="#createGameModal">Create
+                Game!</a>
+              <a class="waves-effect waves-light btn btn-space teal lighten-2 modal-trigger" href="#joinGameModal">Join
+                Game!</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="gameLobby" class="col s12 buffer-bottom">
+      <!-- Game Lobby -->
+      <div class="container">
+        <div class="buffer"><br></div>
+        <div class="center">
+          <div class="title">
+            <h3>Game Lobby</h3>
+          </div>
+          <hr>
+          <div class="text-primary black-text">
+            <div class="container">
+              <h3 class="subtitle" id="sessionID">Game ID: #####</h3>
+              <div class="left-align" id="hostMessage">
+                <br>
+                <h5 class="subtitle">Waiting for host to start the game...</h5>
+              </div>
+              <br>
+              <div class="container left-align">
+                <h5 class="subtitle"><u>Members:</u></h5>
+                <div class="center-align">
+                  <p id="memberTable">
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br> <br>
+
+          <div id="hostGameOptions" class="game-options">
+            <button class="waves-effect waves-light btn btn-space teal lighten-2" onclick="StartGame()">
+              Start Game!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="gamePage" class="col s12 buffer-bottom">
+      <div class="container">
+        <div class="buffer"><br></div>
+        <div class="title center-align">
+          <h3>Imposter!</h3>
+        </div>
+
+        <hr>
+
+        <div class="center-align">
+          <span>Game Timer: </span>
+          <h3 id="timer" class="timer">Starting...</h3>
+        </div>
+
+        <hr>
+
+        <div class="text-primary black-text">
+          <div class="container">
+            <div class="left-align">
+              <u>
+                <div id="imposter">You are the Imposter</div>
+              </u>
+            </div>
+            <div class="center-align">
+              <div id="roleInfo">Location: Test <br> Role: Test</div>
+            </div>
+          </div>
+
+          <br> <br>
+          <div id="members" class="container center">
+            <div class="left-align"><u>Members:</u></div>
+            <div class="center-align container">
+              <div class="row">
+                <div class="col s6" id="membersOne"></div>
+                <div class="col s6" id="membersTwo"></div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div id="locations" class="container center">
+            <div class="left-align"><u>Locations:</u></div>
+            <div class="center-align container">
+              <div class="row">
+                <div class="col s6" id="locationsOne"></div>
+                <div class="col s6" id="locationsTwo"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Create game modal -->
+    <div id="createGameModal" class="modal">
+      <form id="submitCreateForm">
+        <div class="modal-content center">
+          <h4>Create Game</h4>
+          <br>
+          <div class="input-field inline col s8">
+            <input placeholder="Display Name" id="displayName" type="text" class="validate">
+            <label for="displayName">Display Name</label>
+          </div>
+          <br>
+          <div class="input-field inline col s8">
+            <input value=8 id="gameTimer" type="number" class="validate">
+            <label for="gameTimer">Game Timer (minutes)</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" onclick="createGame()" class="modal-close waves-effect waves-green btn-flat" />
+        </div>
+      </form>
+    </div>
+
+    <!-- Join game modal -->
+    <div id="joinGameModal" class="modal">
+      <form id="joinForm">
+        <div class="modal-content center">
+          <h4>Join Game</h4>
+          <br>
+          <div class="input-field inline col s8">
+            <input placeholder="Game ID" id="gameId" type="text" class="validate">
+            <label for="gameId">Game Id</label>
+          </div>
+          <br>
+          <div class="input-field inline col s8">
+            <input placeholder="Display Name" id="joineeName" type="text" class="validate">
+            <label for="joineeName">Display Name</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" onclick="joinGame()" class="modal-close waves-effect waves-green btn-flat" />
+        </div>
+      </form>
+    </div>
+
+  </main>
+
+  <footer class="page-footer footer-copyright teal lighten-2">
+    <div class="container buffer-bottom">
+      &nbsp;&nbsp;&nbsp; Created by&nbsp;<a href="https://github.com/Farzan-Nadeem"><u>Farzan
+          Nadeem</u></a>.
+      Inspiration taken from <a href="https://spyfall.crabhat.com/"><u>Spyfall</u></a>. <br>
+    </div>
+    <div></div>
+  </footer>
+</body>
+
+</html>
